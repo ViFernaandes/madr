@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "madr"
+version = "0.1.0"
+description = ""
+authors = ["ViFernaandes", "vini_532cursos@hotmail.com"]
+readme = "README.md"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+fastapi = { extras = ["standard"], version = "^0.115.6" }
+pydantic = { extras = ["email"], version = "^2.10.4" }
+sqlalchemy = "^2.0.37"
+pydantic-settings = "2.3.4"
+alembic = "^1.14.0"
+pwdlib = { extras = ["argon2"], version = "^0.2.1" }
+python-multipart = "^0.0.20"
+pyjwt = "^2.10.1"
+psycopg = { extras = ["binary"], version = "^3.2.6" }
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.7"
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+taskipy = "^1.14.1"
+factory-boy = "^3.3.3"
+freezegun = "^1.5.1"
+testcontainers = "^4.10.0"
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+run = 'fastapi dev madrs/app.py'
+
+pre_test = 'task lint'
+test = 'pytest -s --cov=madrs -v'
+post_test = 'covarege.html'
+
+lint = 'ruff check . && ruff check . --diff'
+format = 'ruff check . --fix && ruff format .'
