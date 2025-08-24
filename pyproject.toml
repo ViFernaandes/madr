@@ -1,5 +1,6 @@
 [tool.poetry]
 name = "madr"
+packages = [{ include = "madrs" }]
 version = "0.1.0"
 description = ""
 authors = ["ViFernaandes", "vini_532cursos@hotmail.com"]
