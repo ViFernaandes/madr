@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column, registry
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
 
@@ -20,7 +21,10 @@ class Livro:
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     ano: Mapped[str]
     titulo: Mapped[str] = mapped_column(unique=True)
-    id_romancista: Mapped[int]
+    id_romancista: Mapped[int] = mapped_column(ForeignKey('romancistas.id'))
+    autoria: Mapped['Romancista'] = relationship(
+        init=False, back_populates='livros'
+    )
 
 
 @table_registry.mapped_as_dataclass
@@ -29,4 +33,6 @@ class Romancista:
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     nome: Mapped[str] = mapped_column(unique=True)
-    livros: Mapped[str]
+    livros: Mapped[list['Livro']] = relationship(
+        init=False, back_populates='romancista', cascade='all, delete-orphan'
+    )
